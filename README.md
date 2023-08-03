@@ -23,15 +23,45 @@ It's main intention is those looking to capture emails for newsletter subcribers
 
 ## Features
 
-[TODO]
+- Full email validation
+- API authentication via `x-api-key` header
+- Email de-duplication
 
 ## Building
 
-[TODO]
+Make sure you have `sqlx-cli` installed so that you can manually run migrations to make sure that the database schema is in place. Otherwise compilations will fail :|
 
-## Installation & Setup
+```
+$ cargo install sqlx-cli
+$ sqlx migrate run
+$ cargo build
+```
 
-[TODO]
+## Environment Variables
+
+| Variable     | Description             | Example                              |
+| ------------ | ----------------------- | ------------------------------------ |
+| DATABASE_URL | Pg connection string    | postgres://dev:pass@localhost/ecap   |
+| API_KEY      | API Key for the service | 1f726148-499f-4e5b-b164-1e76ff223af1 |
+
+## Calling the API
+
+```shell
+$ curl \
+        -X POST \
+        -H "Content-Type: application/json" \
+        -H "X-API-KEY: 63cad126-7373-45dd-a075-8687b148aeeb" \
+        -d '{"email": "bob.smith@gmail.com"}' \
+        localhost:8080/submit
+```
+
+## API Responses
+
+| Status Code | Body   | Description                   | Example            |
+| ----------- | ------ | ----------------------------- | ------------------ |
+| 200         | string | operation was succcessful     | "success"          |
+| 400         | string | some validation error message | "email is invalid" |
+| 500         | string | some server side issue        | "server error"     |
 
 ## Version
 

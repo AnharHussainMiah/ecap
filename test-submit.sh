@@ -1,0 +1,1 @@
+curl -X POST -H "Content-Type: application/json" -H "X-API-KEY: 63cad126-7373-45dd-a075-8687b148aeeb" -d '{"email": "'$1'"}' localhost:8080/submit
