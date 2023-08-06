@@ -26,6 +26,7 @@ It's main intention is those looking to capture emails for newsletter subcribers
 - Full email validation
 - API authentication via `x-api-key` header
 - Email de-duplication
+- Accepts CORS requests (tested under Firefox & Chrome)
 
 ## Building
 
@@ -43,6 +44,7 @@ $ cargo build
 | ------------ | ----------------------- | ------------------------------------ |
 | DATABASE_URL | Pg connection string    | postgres://dev:pass@localhost/ecap   |
 | API_KEY      | API Key for the service | 1f726148-499f-4e5b-b164-1e76ff223af1 |
+| ECAP_PORT    | default is 8080         | 1337                                 |
 
 ## Calling the API
 

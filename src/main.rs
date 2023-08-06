@@ -23,8 +23,8 @@ lazy_static! {
 #[derive(Debug, Deserialize, Serialize, Clone, Validate)]
 struct Payload {
     #[validate(
-        length(max = 300, message = "the email exceeds 300 characters"),
-        email(message = "this email does not appear to be valid")
+        length(max = 250, message = "the email is too long, can not exceed 250 characters"),
+        email(message = "this is not a valid email address")
     )]
     email: String,
 }
@@ -56,11 +56,11 @@ async fn main() {
             .and_then(self::submit)
             .with(cors_copy);
 
-        println!("==> starting server on port 8080, CTRL+C to stop...");
+        let port = self::get_port();
 
+        println!("==> starting server on port {}, CTRL+C to stop...", port);
         let routes = post_submit.or(preflight);
-
-        warp::serve(routes).run(([0, 0, 0, 0], 8080)).await;
+        warp::serve(routes).run(([0, 0, 0, 0], port)).await;
     } else {
         println!("WARNING: unable to establish a database connection, exiting...");
         process::exit(1);
@@ -158,4 +158,17 @@ async fn is_email_exists(pool: &PgPool, email: &str) -> Result<bool, sqlx::Error
     .await?;
 
     Ok(rec.hit > Some(0))
+}
+
+
+fn get_port() -> u16 {
+    let mut port: u16 = 8080;
+    if let Ok(v) = env::var("ECAP_PORT") {
+        if let Ok(v) = v.parse::<u16>() {
+            port = v;
+        } else {
+            println!("WARNING: rejecting port [{}] as invalid", v);
+        }
+    }
+    port
 }
